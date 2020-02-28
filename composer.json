@@ -1,0 +1,37 @@
+{
+    "name": "grosv/laravel-passwordless-login",
+    "description": "Passwordless login using temporary signed URL sent via email or SMS",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ed Grosvenor",
+            "email": "ed.grosvenor@wickedviral.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.3",
+        "illuminate/support": "^6.0|^7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Grosv\\LaravelPasswordlessLogin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "App\\": "vendor/orchestra/testbench-core/laravel/app"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": "Grosv\\LaravelPasswordlessLogin\\LaravelPasswordlessLoginProvider"
+        }
+    }
+}
