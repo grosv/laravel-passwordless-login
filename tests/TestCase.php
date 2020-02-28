@@ -4,14 +4,12 @@ namespace Tests;
 
 use Grosv\LaravelPasswordlessLogin\LaravelPasswordlessLoginProvider;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -24,18 +22,17 @@ abstract class TestCase extends BaseTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-
     }
 
     private function addPhoneToUsersTable()
     {
-        Schema::table('users', function(Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('phone')->nullable();
         });
     }
 
     /**
-     * add the package provider
+     * add the package provider.
      *
      * @param $app
      *
@@ -45,7 +42,6 @@ abstract class TestCase extends BaseTestCase
     {
         return [LaravelPasswordlessLoginProvider::class];
     }
-
 
     protected function getEnvironmentSetUp($app)
     {

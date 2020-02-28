@@ -3,13 +3,13 @@
 namespace Tests;
 
 use Carbon\Carbon;
+use Faker\Factory as Faker;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
 use Grosv\LaravelPasswordlessLogin\Models\User;
-use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class Test extends TestCase
+class SignedUrlTest extends TestCase
 {
     protected $user;
     private $url;
@@ -23,12 +23,12 @@ class Test extends TestCase
 
         $faker = Faker::create();
         $this->user = User::create([
-            'name' => $faker->name,
-            'email' => $faker->unique()->safeEmail,
+            'name'              => $faker->name,
+            'email'             => $faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-            'phone' => $faker->unique()->phoneNumber
+            'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token'    => Str::random(10),
+            'phone'             => $faker->unique()->phoneNumber,
         ]);
 
         Carbon::setTestNow();
@@ -39,7 +39,6 @@ class Test extends TestCase
         $this->route = $route;
         $this->expires = $expires;
         $this->uid = $uid;
-
     }
 
     /** @test */
@@ -51,7 +50,6 @@ class Test extends TestCase
     /** @test */
     public function can_create_default_signed_login_url()
     {
-
         $this->assertEquals(Carbon::now()->addMinutes(30)->timestamp, $this->expires);
         $this->assertEquals($this->user->id, $this->uid);
         $this->assertEquals(config('laravel-passwordless-login.login_route_name'), $this->route);
@@ -92,9 +90,8 @@ class Test extends TestCase
     public function an_invalid_signature_request_will_not_log_user_in()
     {
         $this->assertGuest();
-        $response = $this->get($this->url . 'tampered');
+        $response = $this->get($this->url.'tampered');
         $response->assertStatus(401);
         $this->assertGuest();
     }
-
 }

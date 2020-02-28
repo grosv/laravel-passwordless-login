@@ -1,15 +1,12 @@
 <?php
 
-
 namespace Grosv\LaravelPasswordlessLogin;
-
 
 use Grosv\LaravelPasswordlessLogin\Models\User;
 use Illuminate\Support\Facades\URL;
 
 class LoginUrl
 {
-
     /**
      * @var User
      */
