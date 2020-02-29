@@ -1,6 +1,6 @@
 {
     "name": "grosv/laravel-passwordless-login",
-    "description": "Passwordless login using temporary signed URL sent via email or SMS",
+    "description": "Passwordless login using temporary signed URL",
     "type": "library",
     "license": "MIT",
     "authors": [
