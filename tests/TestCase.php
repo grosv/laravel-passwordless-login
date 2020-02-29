@@ -14,7 +14,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->loadLaravelMigrations();
-        $this->addPhoneToUsersTable();
         Config::set('laravel-passwordless-login.user_model', 'Grosv\LaravelPasswordlessLogin\Models\User');
         Config::set('laravel-passwordless-login.redirect_on_success', '/laravel_passwordless_login_redirect_test_route');
     }
@@ -22,13 +21,6 @@ abstract class TestCase extends BaseTestCase
     public function tearDown(): void
     {
         parent::tearDown();
-    }
-
-    private function addPhoneToUsersTable()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone')->nullable();
-        });
     }
 
     /**
