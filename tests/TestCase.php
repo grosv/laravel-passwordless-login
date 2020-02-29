@@ -3,9 +3,7 @@
 namespace Tests;
 
 use Grosv\LaravelPasswordlessLogin\LaravelPasswordlessLoginProvider;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
