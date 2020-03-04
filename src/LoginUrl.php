@@ -2,8 +2,11 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
-use Illuminate\Foundation\Auth\User;
+
+use Grosv\LaravelPasswordlessLogin\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class LoginUrl
 {
@@ -29,8 +32,16 @@ class LoginUrl
 
     public function generate()
     {
-        return URL::temporarySignedRoute(
-          $this->route_name, $this->route_expires, ['uid' => $this->user->id]
-        );
+        if ($this->isAuthenticatable())
+            return URL::temporarySignedRoute(
+                $this->route_name, $this->route_expires, ['uid' => $this->user->id]
+            );
+    }
+
+    private function isAuthenticatable()
+    {
+        if ($this->user instanceof Authenticatable)
+            return true;
+        else throw new AuthenticationException('The model you passed as a user is unauthenticatable');
     }
 }
