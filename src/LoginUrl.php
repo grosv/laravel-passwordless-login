@@ -2,7 +2,6 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\URL;
 

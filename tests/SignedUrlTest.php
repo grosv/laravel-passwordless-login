@@ -49,6 +49,7 @@ class SignedUrlTest extends TestCase
         $this->assertEquals(config('laravel-passwordless-login.login_route_name'), $this->route);
     }
 
+    /** @test */
     public function a_signed_request_will_log_user_in_and_redirect()
     {
         $this->assertGuest();
@@ -83,7 +84,7 @@ class SignedUrlTest extends TestCase
     public function an_invalid_signature_request_will_not_log_user_in()
     {
         $this->assertGuest();
-        $response = $this->get($this->url . 'tampered');
+        $response = $this->get($this->url.'tampered');
         $response->assertStatus(401);
         $this->assertGuest();
     }
