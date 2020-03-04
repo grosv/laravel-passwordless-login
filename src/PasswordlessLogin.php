@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Grosv\LaravelPasswordlessLogin;
 
 use Illuminate\Foundation\Auth\User;
@@ -16,5 +15,4 @@ class PasswordlessLogin extends Facade
     {
         return 'passwordless-login';
     }
-
 }
