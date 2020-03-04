@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Facade;
  *
  * @package Grosv\LaravelPasswordlessLogin
  */
-class PasswordlessLogin extends  Facade
+class PasswordlessLogin extends Facade
 {
     protected static function getFacadeAccessor()
     {
