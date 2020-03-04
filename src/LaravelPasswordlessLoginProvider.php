@@ -8,16 +8,16 @@ class LaravelPasswordlessLoginProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'../config/config.php', config_path('laravel-passwordless-login.php'),
-            ], 'config');
+                __DIR__ . '../config/config.php', config_path('laravel-passwordless-login.php'),
+            ], 'passwordless-login-config');
         }
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-passwordless-login');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'laravel-passwordless-login');
     }
 }
