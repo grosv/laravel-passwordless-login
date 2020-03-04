@@ -19,8 +19,13 @@ use Grosv\LaravelPasswordlessLogin\LoginUrl;
 function sendLoginLink()
 {
     $user = User::find(1);
+
     $generator = new LoginUrl($user);
     $url = $generator->generate();
+
+    //OR Use a Facade
+    $url = PasswordlessLogin::forUser($user)->generate();
+
     // Send $url in an email or text message to your user
 }
 ```
