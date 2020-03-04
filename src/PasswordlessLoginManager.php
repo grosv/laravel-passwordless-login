@@ -6,10 +6,9 @@ namespace Grosv\LaravelPasswordlessLogin;
 use Illuminate\Foundation\Auth\User;
 
 /**
- * The class used by \Grosv\LaravelPasswordlessLogin\PasswordlessLoginFacade
+ * The class used by \Grosv\LaravelPasswordlessLogin\PasswordlessLoginFacade.
  *
  * Class PasswordlessLogin
- * @package Grosv\LaravelPasswordlessLogin
  */
 class PasswordlessLoginManager
 {
@@ -19,7 +18,7 @@ class PasswordlessLoginManager
     private $loginUrl;
 
     /**
-     * This assigns the login url to the given user
+     * This assigns the login url to the given user.
      *
      * @param User $user
      * @return $this
@@ -31,7 +30,7 @@ class PasswordlessLoginManager
     }
 
     /**
-     * This generates the URL
+     * This generates the URL.
      *
      * @return string signed login url
      */
