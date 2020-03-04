@@ -8,7 +8,10 @@ Route::get(config('laravel-passwordless-login.login_route').'/{expires}/{uid}', 
     abort_if(!$request->hasValidSignature(), 401);
 
     $user_model = config('laravel-passwordless-login.user_model');
-    Auth::login($user_model::find($request->uid), 'laravel-passwordless-login.remember_login');
+
+    Auth::guard(config('laravel-passwordless-login.user_guard'))
+        ->login($user_model::find($request->uid), 'laravel-passwordless-login.remember_login');
+
     redirect(config('laravel-passwordless-login.redirect_on_success'));
 })->name(config('laravel-passwordless-login.login_route_name'));
 
