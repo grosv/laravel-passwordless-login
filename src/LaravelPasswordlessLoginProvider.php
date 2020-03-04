@@ -12,12 +12,16 @@ class LaravelPasswordlessLoginProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'../config/config.php', config_path('laravel-passwordless-login.php'),
-            ], 'config');
+            ], 'passwordless-login-config');
         }
     }
 
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-passwordless-login');
+
+        $this->app->singleton('passwordless-login', function ($app) {
+            return new PasswordlessLoginManager();
+        });
     }
 }
