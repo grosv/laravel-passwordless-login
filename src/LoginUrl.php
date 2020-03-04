@@ -32,6 +32,7 @@ class LoginUrl
 
     public function generate()
     {
+
         if ($this->isAuthenticatable()) {
             return URL::temporarySignedRoute(
                 $this->route_name, $this->route_expires, ['uid' => $this->user->id]
