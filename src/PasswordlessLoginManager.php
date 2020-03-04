@@ -20,11 +20,13 @@ class PasswordlessLoginManager
      * This assigns the login url to the given user.
      *
      * @param User $user
+     *
      * @return $this
      */
     public function forUser(User $user)
     {
         $this->loginUrl = new LoginUrl($user);
+
         return $this;
     }
 
