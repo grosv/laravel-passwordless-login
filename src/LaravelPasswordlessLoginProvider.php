@@ -19,5 +19,9 @@ class LaravelPasswordlessLoginProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-passwordless-login');
+
+        $this->app->singleton('passwordless-login', function ($app) {
+            return new PasswordlessLoginManager();
+        });
     }
 }
