@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Grosv\LaravelPasswordlessLogin;
 
 use Illuminate\Foundation\Auth\User;
