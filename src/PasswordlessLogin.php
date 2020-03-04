@@ -3,26 +3,13 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * The class used by \Grosv\LaravelPasswordlessLogin\PasswordlessLoginFacade
- *
- * Class PasswordlessLogin
- * @package Grosv\LaravelPasswordlessLogin
- */
-class PasswordlessLogin
+class PasswordlessLogin extends  Facade
 {
-    private $loginUrl;
-
-    public function forUser(User $user)
+    protected static function getFacadeAccessor()
     {
-        $this->loginUrl = new LoginUrl($user);
-        return $this;
+        return 'passwordless-login';
     }
 
-    public function generate()
-    {
-        return $this->loginUrl->generate();
-    }
 }
