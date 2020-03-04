@@ -37,6 +37,7 @@ class LoginUrl
                 $this->route_name, $this->route_expires, ['uid' => $this->user->id]
             );
         }
+
     }
 
     private function isAuthenticatable()
@@ -46,5 +47,6 @@ class LoginUrl
         } else {
             throw new AuthenticationException('The model you passed as a user is unauthenticatable');
         }
+
     }
 }
