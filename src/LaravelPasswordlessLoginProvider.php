@@ -30,6 +30,6 @@ class LaravelPasswordlessLoginProvider extends ServiceProvider
             return new PasswordlessLoginOptions($app['config']['laravel-passwordless-login']);
         });
 
-        $this->app->alias(PasswordlessLoginManager::class, 'passwordless-login');
+        $this->app->alias(PasswordlessLoginUrlGenerator::class, 'passwordless-login');
     }
 }

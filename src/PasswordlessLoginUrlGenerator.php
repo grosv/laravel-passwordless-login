@@ -5,7 +5,7 @@ namespace Grosv\LaravelPasswordlessLogin;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
-class PasswordlessLoginManager
+class PasswordlessLoginUrlGenerator
 {
     /**
      * @var \Grosv\LaravelPasswordlessLogin\PasswordlessLoginOptions
@@ -18,7 +18,7 @@ class PasswordlessLoginManager
     protected $url;
 
     /**
-     * PasswordlessLoginManager constructor.
+     * PasswordlessLoginUrlGenerator constructor.
      *
      * @param \Grosv\LaravelPasswordlessLogin\PasswordlessLoginOptions $options
      * @param \Illuminate\Contracts\Routing\UrlGenerator               $url
