@@ -29,7 +29,7 @@ class SignedUrlTest extends TestCase
             'remember_token'    => Str::random(10),
         ]);
 
-        Carbon::setTestNow();
+        Carbon::setTestNow('2020-01-01 00:00:00');
 
         $generator = new LoginUrl($this->user);
         $this->url = $generator->generate();
