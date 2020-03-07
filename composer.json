@@ -13,6 +13,8 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.3",
+        "illuminate/contracts": "^6.0|^7.0",
+        "illuminate/http": "^6.0|^7.0",
         "illuminate/support": "^6.0|^7.0"
     },
     "require-dev": {
