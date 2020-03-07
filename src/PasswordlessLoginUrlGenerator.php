@@ -38,7 +38,7 @@ class PasswordlessLoginUrlGenerator
     {
         return $this->url->temporarySignedRoute(
             $this->options->loginRouteName(),
-            now()->addMinutes($this->options->loginRouteExpires()),
+            $this->options->loginRouteExpires() * 60,
             ['uid' => $user->getAuthIdentifier()]
         );
     }
