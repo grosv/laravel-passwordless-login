@@ -6,12 +6,18 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelPasswordlessLoginProvider extends ServiceProvider
 {
-    public function boot()
+    /**
+     * @param \Grosv\LaravelPasswordlessLogin\PasswordlessLoginRouteRegistrar $router
+     */
+    public function boot(PasswordlessLoginRouteRegistrar $router)
     {
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
+        if (!$this->app->routesAreCached()) {
+            $router->register();
+        }
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'../config/config.php', config_path('laravel-passwordless-login.php'),
+                __DIR__.'../config/config.php', $this->app->configPath('laravel-passwordless-login.php'),
             ], 'passwordless-login-config');
         }
     }
@@ -20,8 +26,10 @@ class LaravelPasswordlessLoginProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-passwordless-login');
 
-        $this->app->singleton('passwordless-login', function ($app) {
-            return new PasswordlessLoginManager();
+        $this->app->bind(PasswordlessLoginOptions::class, function ($app) {
+            return new PasswordlessLoginOptions($app['config']['laravel-passwordless-login']);
         });
+
+        $this->app->alias(PasswordlessLoginManager::class, 'passwordless-login');
     }
 }

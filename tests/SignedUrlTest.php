@@ -5,7 +5,6 @@ namespace Tests;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
-use Grosv\LaravelPasswordlessLogin\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 

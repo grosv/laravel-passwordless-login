@@ -2,41 +2,44 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
-/**
- * The class used by \Grosv\LaravelPasswordlessLogin\PasswordlessLoginFacade.
- *
- * Class PasswordlessLogin
- */
 class PasswordlessLoginManager
 {
     /**
-     * @var \Grosv\LaravelPasswordlessLogin\LoginUrl
+     * @var \Grosv\LaravelPasswordlessLogin\PasswordlessLoginOptions
      */
-    private $loginUrl;
+    protected $options;
 
     /**
-     * This assigns the login url to the given user.
-     *
-     * @param User $user
-     *
-     * @return $this
+     * @var \Illuminate\Contracts\Routing\UrlGenerator|\Illuminate\Routing\UrlGenerator
      */
-    public function forUser(User $user)
-    {
-        $this->loginUrl = new LoginUrl($user);
+    protected $url;
 
-        return $this;
+    /**
+     * PasswordlessLoginManager constructor.
+     *
+     * @param \Grosv\LaravelPasswordlessLogin\PasswordlessLoginOptions $options
+     * @param \Illuminate\Contracts\Routing\UrlGenerator               $url
+     */
+    public function __construct(PasswordlessLoginOptions $options, UrlGenerator $url)
+    {
+        $this->options = $options;
+        $this->url = $url;
     }
 
     /**
-     * This generates the URL.
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
      *
-     * @return string signed login url
+     * @return string
      */
-    public function generate()
+    public function generate(Authenticatable $user)
     {
-        return $this->loginUrl->generate();
+        return $this->url->temporarySignedRoute(
+            $this->options->loginRouteName(),
+            now()->addMinutes($this->options->loginRouteExpires()),
+            ['uid' => $user->getAuthIdentifier()]
+        );
     }
 }

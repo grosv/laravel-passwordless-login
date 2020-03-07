@@ -1,6 +1,6 @@
 <?php
 
-namespace Grosv\LaravelPasswordlessLogin\Models;
+namespace Tests;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
