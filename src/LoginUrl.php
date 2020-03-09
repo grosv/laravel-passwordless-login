@@ -2,6 +2,7 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
+use Grosv\LaravelPasswordlessLogin\Traits\PasswordlessLogable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\URL;
 
@@ -27,9 +28,14 @@ class LoginUrl
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->redirect_url = config('laravel-passwordless-login.redirect_on_success');
-        $this->route_name = config('laravel-passwordless-login.login_route_name');
-        $this->route_expires = now()->addMinutes(config('laravel-passwordless-login.login_route_expires'));
+
+        if($this->usesTrait()) {
+            $this->route_name = $user->getLoginRouteName();
+            $this->route_expires = $user->getLoginRouteExpiresIn();
+        }else{
+            $this->route_name = config('laravel-passwordless-login.login_route_name');
+            $this->route_expires = now()->addMinutes(config('laravel-passwordless-login.login_route_expires'));
+        }
     }
 
     public function setRedirectUrl(string $redirectUrl)
@@ -47,5 +53,17 @@ class LoginUrl
                 'redirect_to' => $this->redirect_url
             ]
         );
+    }
+
+    /**
+     * Checks if the incoming user uses the PasswordlessLogable trait.
+     *
+     * @return bool
+     */
+    private function usesTrait(): bool
+    {
+        $traits = class_uses($this->user, true);
+
+        return in_array(PasswordlessLogable::class, $traits);
     }
 }
