@@ -60,7 +60,7 @@ class SignedUrlTest extends TestCase
         $this->assertGuest();
         $response = $this->followingRedirects()->get($this->url);
         $this->assertAuthenticatedAs($this->user);
-        $response->assertSuccessful();
+        $response->assertStatus(204);
         Auth::logout();
         $this->assertGuest();
     }
@@ -92,5 +92,15 @@ class SignedUrlTest extends TestCase
         $response = $this->get($this->url.'tampered');
         $response->assertStatus(401);
         $this->assertGuest();
+    }
+
+    /** @test */
+    public function allows_override_of_post_login_redirect()
+    {
+        $generator = new LoginUrl($this->user);
+        $generator->setRedirectUrl('/laravel_passwordless_login_redirect_overridden_route');
+        $this->url = $generator->generate();
+        $response = $this->followingRedirects()->get($this->url);
+        $response->assertStatus(200);
     }
 }
