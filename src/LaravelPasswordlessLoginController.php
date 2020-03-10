@@ -24,7 +24,7 @@ class LaravelPasswordlessLoginController extends Controller
         Auth::guard(config('laravel-passwordless-login.user_guard'))
             ->login($user_model::find($request->uid), 'laravel-passwordless-login.remember_login');
 
-        return redirect(config('laravel-passwordless-login.redirect_on_success'));
+        return redirect($request->redirect_to);
     }
 
     /**
