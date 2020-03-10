@@ -36,4 +36,14 @@ class LaravelPasswordlessLoginController extends Controller
     {
         return response()->noContent(204);
     }
+
+    /**
+     * Redirect override testing.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function overrideTestRoute()
+    {
+        return response()->noContent(200);
+    }
 }
