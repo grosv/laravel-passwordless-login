@@ -31,6 +31,20 @@ class PasswordlessLoginManager
     }
 
     /**
+     * Sets redirect URL for the Facade.
+     *
+     * @param string $redirectUrl
+     *
+     * @return $this
+     */
+    public function setRedirectUrl(string $redirectUrl): self
+    {
+        $this->loginUrl->setRedirectUrl($redirectUrl);
+
+        return $this;
+    }
+
+    /**
      * This generates the URL.
      *
      * @return string signed login url

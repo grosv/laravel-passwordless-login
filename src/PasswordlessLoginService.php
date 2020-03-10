@@ -26,9 +26,25 @@ class PasswordlessLoginService
     }
 
     /**
+     * Converts the user class into a slug to use for the route.
+     *
+     * @param User $user
+     *
+     * @return string
+     */
+    public function getFormattedUserClass(User $user): string
+    {
+        $userClassName = get_class($user);
+        $formattedName = str_replace('\\', '-', $userClassName);
+
+        return Str::slug($formattedName);
+    }
+
+    /**
      * Checks if this use class uses the PasswordlessLogable trait.
      *
      * @param User $user
+     *
      * @return bool
      */
     public function usesTrait(User $user): bool

@@ -44,10 +44,11 @@ class LaravelPasswordlessLoginController extends Controller
         $rememberLogin = $usesTrait ? $user->shouldRememberLogin() : config('laravel-passwordless-login.remember_login');
         $redirectUrl = $usesTrait ? $user->getRedirectUrl() : ($request->redirect_to ?: config('laravel-passwordless-login.redirect_on_success'));
 
-        Auth::guard($guard)
-            ->login($user, $rememberLogin);
-
-        return redirect($redirectUrl);
+        if (Auth::guard($guard)->login($user, $rememberLogin)) {
+            return redirect($redirectUrl);
+        } else {
+            abort(401, 'Failed to authenticate');
+        }
     }
 
     /**
