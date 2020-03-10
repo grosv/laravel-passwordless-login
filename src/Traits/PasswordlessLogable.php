@@ -28,26 +28,6 @@ trait PasswordlessLogable
     }
 
     /**
-     * Returns the login route.
-     *
-     * @return string
-     */
-    public function getLoginRoute(): string
-    {
-        return config('laravel-passwordless-login.login_route');
-    }
-
-    /**
-     * Returns the login route name.
-     *
-     * @return string
-     */
-    public function getLoginRouteName(): string
-    {
-        return config('laravel-passwordless-login.login_route_name');
-    }
-
-    /**
      * Returns the number of minutes the route will expire in from the current time.
      *
      * @return int

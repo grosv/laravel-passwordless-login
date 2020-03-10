@@ -5,6 +5,7 @@ namespace Grosv\LaravelPasswordlessLogin;
 use Grosv\LaravelPasswordlessLogin\Traits\PasswordlessLogable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class LoginUrl
 {
@@ -25,17 +26,25 @@ class LoginUrl
      */
     private $redirect_url;
 
+    /**
+     * @var PasswordlessLoginService
+     */
+    private $passwordlessLoginService;
+
     public function __construct(User $user)
     {
         $this->user = $user;
 
-        if($this->usesTrait()) {
-            $this->route_name = $user->getLoginRouteName();
+
+        $this->passwordlessLoginService = new PasswordlessLoginService();
+
+        if ($this->passwordlessLoginService->usesTrait($user))
+
             $this->route_expires = $user->getLoginRouteExpiresIn();
-        }else{
-            $this->route_name = config('laravel-passwordless-login.login_route_name');
+        else
             $this->route_expires = now()->addMinutes(config('laravel-passwordless-login.login_route_expires'));
-        }
+
+        $this->route_name = config('laravel-passwordless-login.login_route_name');
     }
 
     public function setRedirectUrl(string $redirectUrl)
@@ -49,21 +58,22 @@ class LoginUrl
             $this->route_name,
             $this->route_expires,
             [
-                'uid'         => $this->user->id,
-                'redirect_to' => $this->redirect_url
+                'uid' => $this->user->id,
+                'redirect_to' => $this->redirect_url,
+                'user_type' => $this->getFormattedUserClass()
             ]
         );
     }
 
     /**
-     * Checks if the incoming user uses the PasswordlessLogable trait.
+     * Converts the user class into a slug to use for the route.
      *
-     * @return bool
+     * @return string
      */
-    private function usesTrait(): bool
+    private function getFormattedUserClass(): string
     {
-        $traits = class_uses($this->user, true);
-
-        return in_array(PasswordlessLogable::class, $traits);
+        $userClassName = get_class($this->user);
+        $formattedName = str_replace('\\', '-', $userClassName);
+        return Str::slug($formattedName);
     }
 }

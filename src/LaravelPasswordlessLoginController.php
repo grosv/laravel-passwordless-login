@@ -9,6 +9,21 @@ use Illuminate\Support\Facades\Auth;
 class LaravelPasswordlessLoginController extends Controller
 {
     /**
+     * @var PasswordlessLoginService
+     */
+    private $passwordlessLoginService;
+
+    /**
+     * LaravelPasswordlessLoginController constructor.
+     *
+     * @param PasswordlessLoginService $passwordlessLoginService
+     */
+    public function __construct(PasswordlessLoginService $passwordlessLoginService)
+    {
+        $this->passwordlessLoginService = $passwordlessLoginService;
+    }
+
+    /**
      * Handles login from the signed route.
      *
      * @param Request $request
@@ -19,12 +34,20 @@ class LaravelPasswordlessLoginController extends Controller
     {
         abort_if(!$request->hasValidSignature(), 401);
 
-        $user_model = config('laravel-passwordless-login.user_model');
+        $user_model = $this->passwordlessLoginService->getUserClass($request->user_type);
 
-        Auth::guard(config('laravel-passwordless-login.user_guard'))
-            ->login($user_model::find($request->uid), 'laravel-passwordless-login.remember_login');
+        $user = $user_model::find($request->uid);
 
-        return redirect($request->redirect_to);
+        $usesTrait = $this->passwordlessLoginService->usesTrait($user);
+
+        $guard = $usesTrait ? $user->getGuard() : config('laravel-passwordless-login.user_guard');
+        $rememberLogin = $usesTrait ? $user->shouldRememberLogin() : config('laravel-passwordless-login.remember_login');
+        $redirectUrl = $usesTrait ? $user->getRedirectUrl() : ($request->redirect_to ?: config('laravel-passwordless-login.redirect_on_success'));
+
+        Auth::guard($guard)
+            ->login($user, $rememberLogin);
+
+        return redirect($redirectUrl);
     }
 
     /**
