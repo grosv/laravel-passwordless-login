@@ -46,9 +46,10 @@ class LaravelPasswordlessLoginController extends Controller
 
         Auth::guard($guard)->login($user, $rememberLogin);
 
-        if (Auth::guard($guard)->user())
-            return redirect($redirectUrl);
-        else abort(401);
+        abort_if(!Auth::guard($guard)->user(), 401);
+
+        return redirect($redirectUrl);
+
     }
 
     /**
