@@ -5,6 +5,7 @@ namespace Tests;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
+use Grosv\LaravelPasswordlessLogin\Models\Models\User as ModelUser;
 use Grosv\LaravelPasswordlessLogin\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -30,6 +31,14 @@ class SignedUrlTest extends TestCase
             'remember_token'    => Str::random(10),
         ]);
 
+        $this->model_user = ModelUser::create([
+            'name'              => $faker->name,
+            'email'             => $faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token'    => Str::random(10),
+        ]);
+
         Carbon::setTestNow();
 
         $generator = new LoginUrl($this->user);
@@ -40,11 +49,6 @@ class SignedUrlTest extends TestCase
         $this->uid = $uid;
     }
 
-    /** @test */
-    public function ed_knows_how_to_set_up_phpunit()
-    {
-        $this->assertTrue(true);
-    }
 
     /** @test */
     public function can_create_default_signed_login_url()
@@ -60,7 +64,7 @@ class SignedUrlTest extends TestCase
         $this->assertGuest();
         $response = $this->followingRedirects()->get($this->url);
         $this->assertAuthenticatedAs($this->user);
-        $response->assertStatus(204);
+        $response->assertSuccessful();
         Auth::logout();
         $this->assertGuest();
     }
@@ -102,5 +106,19 @@ class SignedUrlTest extends TestCase
         $this->url = $generator->generate();
         $response = $this->followingRedirects()->get($this->url);
         $response->assertStatus(200);
+        $this->assertAuthenticatedAs($this->user);
+    }
+
+    /** @test */
+    public function allows_alternative_auth_model()
+    {
+        $generator = new LoginUrl($this->model_user);
+        $generator->setRedirectUrl('/laravel_passwordless_login_redirect_overridden_route');
+        $this->url = $generator->generate();
+        $response = $this->followingRedirects()->get($this->url);
+        $response->assertSuccessful();
+        $response->assertSee($this->model_user->name);
+        $this->assertAuthenticatedAs($this->model_user);
+
     }
 }

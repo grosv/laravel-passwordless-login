@@ -24,12 +24,22 @@ class LoginUrl
      */
     private $redirect_url;
 
+    /**
+     * @var PasswordlessLoginService
+     */
+    private $passwordlessLoginService;
+
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->redirect_url = config('laravel-passwordless-login.redirect_on_success');
+
+
+        $this->passwordlessLoginService = new PasswordlessLoginService();
+
+
+        $this->route_expires = $this->user->route_expires ?? now()->addMinutes(config('laravel-passwordless-login.login_route_expires'));
+
         $this->route_name = config('laravel-passwordless-login.login_route_name');
-        $this->route_expires = now()->addMinutes(config('laravel-passwordless-login.login_route_expires'));
     }
 
     public function setRedirectUrl(string $redirectUrl)
@@ -43,8 +53,9 @@ class LoginUrl
             $this->route_name,
             $this->route_expires,
             [
-                'uid'         => $this->user->id,
-                'redirect_to' => $this->redirect_url
+                'uid'           => $this->user->id,
+                'redirect_to'   => $this->redirect_url,
+                'user_type'     => $this->passwordlessLoginService->getFormattedUserClass($this->user),
             ]
         );
     }
