@@ -49,7 +49,6 @@ class SignedUrlTest extends TestCase
         $this->uid = $uid;
     }
 
-
     /** @test */
     public function can_create_default_signed_login_url()
     {
@@ -119,6 +118,5 @@ class SignedUrlTest extends TestCase
         $response->assertSuccessful();
         $response->assertSee($this->model_user->name);
         $this->assertAuthenticatedAs($this->model_user);
-
     }
 }
