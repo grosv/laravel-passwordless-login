@@ -32,6 +32,7 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function login(Request $request)
     {
+
         abort_if(!$request->hasValidSignature(), 401);
 
         $user_model = $this->passwordlessLoginService->getUserClass($request->user_type);
@@ -44,10 +45,10 @@ class LaravelPasswordlessLoginController extends Controller
         $rememberLogin = $usesTrait ? $user->shouldRememberLogin() : config('laravel-passwordless-login.remember_login');
         $redirectUrl = $usesTrait ? $user->getRedirectUrl() : ($request->redirect_to ?: config('laravel-passwordless-login.redirect_on_success'));
 
-        if (Auth::guard($guard)->login($user, $rememberLogin)) {
-            return redirect($redirectUrl);
-        } else {
-            abort(401, 'Failed to authenticate');
+        Auth::guard($guard)->login($user, $rememberLogin);
+
+        if ($user->password !== Auth::user()->password) {
+            abort(401);
         }
     }
 

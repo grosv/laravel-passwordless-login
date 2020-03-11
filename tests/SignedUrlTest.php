@@ -60,7 +60,7 @@ class SignedUrlTest extends TestCase
         $this->assertGuest();
         $response = $this->followingRedirects()->get($this->url);
         $this->assertAuthenticatedAs($this->user);
-        $response->assertStatus(204);
+        $response->assertSuccessful();
         Auth::logout();
         $this->assertGuest();
     }
