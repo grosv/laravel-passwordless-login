@@ -5,7 +5,7 @@ namespace Grosv\LaravelPasswordlessLogin\Traits;
 /**
  * Logs in a user without a password.
  */
-trait Passwordless
+trait PasswordlessLogin
 {
     /**
      * Returns the guard set for this user.
