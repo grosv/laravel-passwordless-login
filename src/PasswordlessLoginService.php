@@ -2,7 +2,7 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
-use Grosv\LaravelPasswordlessLogin\Traits\PasswordlessLogable;
+use Grosv\LaravelPasswordlessLogin\Traits\Passwordless;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Str;
 
@@ -51,6 +51,6 @@ class PasswordlessLoginService
     {
         $traits = class_uses($user, true);
 
-        return in_array(PasswordlessLogable::class, $traits);
+        return in_array(Passwordless::class, $traits);
     }
 }

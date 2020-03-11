@@ -5,14 +5,14 @@ namespace Grosv\LaravelPasswordlessLogin\Traits;
 /**
  * Logs in a user without a password.
  */
-trait PasswordlessLogable
+trait Passwordless
 {
     /**
      * Returns the guard set for this user.
      *
      * @return string
      */
-    public function getGuard(): string
+    public function getGuardNameAttribute(): string
     {
         return config('laravel-passwordless-login.user_guard');
     }
@@ -22,7 +22,7 @@ trait PasswordlessLogable
      *
      * @return bool
      */
-    public function shouldRememberLogin(): bool
+    public function shouldRememberLoginAttribute(): bool
     {
         return config('laravel-passwordless-login.remember_login');
     }
@@ -32,7 +32,7 @@ trait PasswordlessLogable
      *
      * @return int
      */
-    public function getLoginRouteExpiresIn(): int
+    public function getLoginRouteExpiresInAttribute(): int
     {
         return config('laravel-passwordless-login.login_route_expires');
     }
@@ -42,7 +42,7 @@ trait PasswordlessLogable
      *
      * @return string
      */
-    public function getRedirectUrl(): string
+    public function getRedirectUrlAttribute(): string
     {
         return config('laravel-passwordless-login.redirect_on_success');
     }

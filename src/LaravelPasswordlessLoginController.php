@@ -39,17 +39,18 @@ class LaravelPasswordlessLoginController extends Controller
 
         $user = $user_model::find($request->uid);
 
-        $usesTrait = $this->passwordlessLoginService->usesTrait($user);
+        $guard =  $user->guard_name ?? config('laravel-passwordless-login.user_guard');
 
-        $guard = $usesTrait ? $user->getGuard() : config('laravel-passwordless-login.user_guard');
-        $rememberLogin = $usesTrait ? $user->shouldRememberLogin() : config('laravel-passwordless-login.remember_login');
-        $redirectUrl = $usesTrait ? $user->getRedirectUrl() : ($request->redirect_to ?: config('laravel-passwordless-login.redirect_on_success'));
+        $rememberLogin = $user->should_remember_login ?? config('laravel-passwordless-login.remember_login');
+        $redirectUrl = $user->redirect_url ?? ($request->redirect_to ?: config('laravel-passwordless-login.redirect_on_success'));
 
         Auth::guard($guard)->login($user, $rememberLogin);
 
         if ($user->password !== Auth::user()->password) {
             abort(401);
         }
+
+        return redirect($redirectUrl);
     }
 
     /**
@@ -59,7 +60,7 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function redirectTestRoute()
     {
-        return response()->noContent(204);
+        return response(Auth::user()->name, 200);
     }
 
     /**
@@ -69,6 +70,6 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function overrideTestRoute()
     {
-        return response()->noContent(200);
+        return response('Redirected ' . Auth::user()->name, 200);
     }
 }
