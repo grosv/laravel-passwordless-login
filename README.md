@@ -11,7 +11,7 @@ This package provides a temporary signed route that logs in a user. What it does
 composer require grosv/laravel-passwordless-login
 ```
 
-### Usage
+### Simple Usage
 ```php
 use App\User;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
@@ -21,12 +21,46 @@ function sendLoginLink()
     $user = User::find(1);
 
     $generator = new LoginUrl($user);
+    $generator->setRedirectUrl('/somewhere/else'); // Override the default url to redirect to after login
     $url = $generator->generate();
 
     //OR Use a Facade
     $url = PasswordlessLogin::forUser($user)->generate();
 
     // Send $url in an email or text message to your user
+}
+```
+### Using A Trait
+
+Because some sites have more than one user-type model (users, admins, etc.), you can use a trait to set up the default configurations for each user type. The methods below are provided by the trait, so you only need to include the ones for which you want to use a different value.
+
+```php
+use Grosv\LaravelPasswordlessLogin\Traits\PasswordlessLogin;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use PasswordlessLogin;
+
+    public function getGuardNameAttribute(): string 
+    {
+        return config('laravel-passwordless-login.remember_login');
+    }
+    
+    public function shouldRememberLoginAttribute(): bool
+    {
+        return config('laravel-passwordless-login.remember_login');
+    }
+
+    public function getLoginRouteExpiresInAttribute(): int
+    {
+        return config('laravel-passwordless-login.login_route_expires');
+    }
+
+    public function getRedirectUrlAttribute(): string
+    {
+        return config('laravel-passwordless-login.redirect_on_success');
+    }
 }
 ```
 
@@ -41,6 +75,7 @@ LPL_LOGIN_ROUTE=/magic-login
 LPL_LOGIN_ROUTE_NAME=magic-login
 LPL_LOGIN_ROUTE_EXPIRES=30
 LPL_REDIRECT_ON_LOGIN=/
+LPL_USER_GUARD=web
 ```
 LPL_USER_MODEL is the the authenticatable model you are logging in (usually App\User)
 

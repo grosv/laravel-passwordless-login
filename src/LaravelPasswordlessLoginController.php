@@ -32,7 +32,6 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function login(Request $request)
     {
-
         abort_if(!$request->hasValidSignature(), 401);
 
         $user_model = $this->passwordlessLoginService->getUserClass($request->user_type);
@@ -49,7 +48,6 @@ class LaravelPasswordlessLoginController extends Controller
         abort_if(!Auth::guard($guard)->user(), 401);
 
         return redirect($redirectUrl);
-
     }
 
     /**
@@ -69,6 +67,6 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function overrideTestRoute()
     {
-        return response('Redirected ' . Auth::user()->name, 200);
+        return response('Redirected '.Auth::user()->name, 200);
     }
 }
