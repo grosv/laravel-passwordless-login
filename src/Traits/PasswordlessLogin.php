@@ -49,8 +49,20 @@ trait PasswordlessLogin
         return config('laravel-passwordless-login.redirect_on_success');
     }
 
+
     public function createPasswordlessLoginLink()
     {
         return (new LoginUrl($this))->generate();
+    }
+    /**
+     * This is a callback called on a successful login.
+     *
+     * @param $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function onPasswordlessLoginSuccess($request)
+    {
+        return redirect($this->getRedirectUrlAttribute());
     }
 }
