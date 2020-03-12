@@ -47,11 +47,12 @@ class LoginUrl
 
     public function generate()
     {
+        $idField = $this->user->getKeyName() ?? 'id';
         return URL::temporarySignedRoute(
             $this->route_name,
             $this->route_expires,
             [
-                'uid'           => $this->user->id,
+                'uid'           => $this->user->$idField,
                 'redirect_to'   => $this->redirect_url,
                 'user_type'     => $this->passwordlessLoginService->getFormattedUserClass($this->user),
             ]

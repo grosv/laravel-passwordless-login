@@ -2,6 +2,8 @@
 
 namespace Grosv\LaravelPasswordlessLogin\Traits;
 
+use Grosv\LaravelPasswordlessLogin\LoginUrl;
+
 /**
  * Logs in a user without a password.
  */
@@ -45,5 +47,10 @@ trait PasswordlessLogin
     public function getRedirectUrlAttribute(): string
     {
         return config('laravel-passwordless-login.redirect_on_success');
+    }
+
+    public function createPasswordlessLoginLink()
+    {
+        return (new LoginUrl($this))->generate();
     }
 }
