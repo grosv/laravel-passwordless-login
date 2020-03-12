@@ -49,11 +49,11 @@ trait PasswordlessLogin
         return config('laravel-passwordless-login.redirect_on_success');
     }
 
-
     public function createPasswordlessLoginLink()
     {
         return (new LoginUrl($this))->generate();
     }
+
     /**
      * This is a callback called on a successful login.
      *
