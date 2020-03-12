@@ -63,6 +63,7 @@ class User extends Authenticatable
     }
 }
 ```
+If you are using the PasswordlessLogin Trait, you can generate a link using the defaults defined in the trait by simply calling `createPasswordlessLoginLink()` on the user you want to log in.
 
 The biggest mistake I could see someone making with this package is creating a login link for one user and sending it to another. Please be careful and test your code. I don't want anyone getting mad at me for somoene else's silliness. 
 
