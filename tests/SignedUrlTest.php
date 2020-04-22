@@ -114,7 +114,6 @@ class SignedUrlTest extends TestCase
     /** @test */
     public function an_expired_request_will_not_log_user_in()
     {
-
         sleep(config('laravel-passwordless-login.login_route_expires') + 1);
         $this->assertGuest();
         $response = $this->get($this->url);
