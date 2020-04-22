@@ -53,7 +53,7 @@ class SignedUrlTest extends TestCase
     /** @test */
     public function can_create_default_signed_login_url()
     {
-        $this->assertEquals(Carbon::now()->addMinutes(30)->timestamp, $this->expires);
+        $this->assertEquals(Carbon::now()->addMinutes(config('laravel-passwordless-login.login_route_expires'))->timestamp, $this->expires);
         $this->assertEquals($this->user->id, $this->uid);
         $this->assertEquals(config('laravel-passwordless-login.login_route_name'), $this->route);
     }
@@ -66,16 +66,6 @@ class SignedUrlTest extends TestCase
         $this->assertAuthenticatedAs($this->user);
         $response->assertSuccessful();
         Auth::logout();
-        $this->assertGuest();
-    }
-
-    /** @test */
-    public function an_expired_request_will_not_log_user_in()
-    {
-        $expired = str_replace($this->expires, $this->expires - 86400, $this->url);
-        $this->assertGuest();
-        $response = $this->get($expired);
-        $response->assertStatus(401);
         $this->assertGuest();
     }
 
@@ -119,5 +109,15 @@ class SignedUrlTest extends TestCase
         $response->assertSuccessful();
         $response->assertSee($this->model_user->name);
         $this->assertAuthenticatedAs($this->model_user);
+    }
+
+    /** @test */
+    public function an_expired_request_will_not_log_user_in()
+    {
+        sleep(config('laravel-passwordless-login.login_route_expires')+1);
+        $this->assertGuest();
+        $response = $this->get($this->url);
+        $response->assertStatus(401);
+        $this->assertGuest();
     }
 }
