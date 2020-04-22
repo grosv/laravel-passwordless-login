@@ -43,7 +43,8 @@ class SignedUrlTest extends TestCase
 
         $generator = new LoginUrl($this->user);
         $this->url = $generator->generate();
-        list($route, $expires, $uid) = explode('/', ltrim(parse_url($this->url)['path'], '/'));
+        list($route, $uid) = explode('/', ltrim(parse_url($this->url)['path'], '/'));
+        $expires  = explode("=",explode("&", explode("?", $this->url)[1] )[0])[1];
         $this->route = $route;
         $this->expires = $expires;
         $this->uid = $uid;
