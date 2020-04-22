@@ -117,6 +117,7 @@ class SignedUrlTest extends TestCase
     {
 
         sleep(config('laravel-passwordless-login.login_route_expires') + 1);
+
         $this->assertGuest();
         $response = $this->get($this->url);
         $response->assertStatus(401);
