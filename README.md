@@ -90,6 +90,10 @@ LPL_LOGIN_ROUTE_EXPIRES is the number of minutes you want the link to be good fo
 
 LPL_REDIRECT_ON_LOGIN is where you want to send the user after they've logged in by clicking their magic link.
 
+LPL_USE_ONCE is whether you want a link to expire after first use (uses cache to store used links)
+
+LPL_INVALID_SIGNATURE_MESSAGE is a custom message sent when we abort with a 401 status on an invalid or expired link
+
 ### Reporting Issues
 
 For security issues, please email me directly at ed@gros.co. For any other problems, use the issue tracker here.
