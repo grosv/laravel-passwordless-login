@@ -44,7 +44,7 @@ class SignedUrlTest extends TestCase
         $generator = new LoginUrl($this->user);
         $this->url = $generator->generate();
         list($route, $uid) = explode('/', ltrim(parse_url($this->url)['path'], '/'));
-        $expires = explode("=",explode('&', explode('?', $this->url)[1] )[0])[1];
+        $expires = explode('=', explode('&', explode('?', $this->url)[1])[0])[1];
 
         $this->route = $route;
         $this->expires = $expires;
@@ -115,7 +115,6 @@ class SignedUrlTest extends TestCase
     /** @test */
     public function an_expired_request_will_not_log_user_in()
     {
-
         sleep(config('laravel-passwordless-login.login_route_expires') + 1);
 
         $this->assertGuest();
