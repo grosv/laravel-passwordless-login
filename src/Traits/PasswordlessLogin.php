@@ -49,6 +49,16 @@ trait PasswordlessLogin
         return config('laravel-passwordless-login.redirect_on_success');
     }
 
+    /**
+     * Returns whether or not to use link once.
+     *
+     * @return bool
+     */
+    public function getLoginUseOnceAttribute()
+    {
+        return config('laravel-passwordless-login.login_use_once');
+    }
+
     public function createPasswordlessLoginLink()
     {
         return (new LoginUrl($this))->generate();
