@@ -32,7 +32,7 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function login(Request $request)
     {
-        abort_if(!$request->hasValidSignature(), 401);
+        abort_if(!$request->hasValidSignature(), 401, config('laravel-passwordless-login.invalid_signature_message'));
 
         $user_model = $this->passwordlessLoginService->getUserClass($request->user_type);
 
