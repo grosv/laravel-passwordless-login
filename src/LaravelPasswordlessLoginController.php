@@ -28,11 +28,15 @@ class LaravelPasswordlessLoginController extends Controller
      *
      * @param Request $request
      *
+     * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function login(Request $request)
     {
-        abort_if(!$request->hasValidSignature(), 401);
+        abort_if(! $request->hasValidSignature() || ! $this->passwordlessLoginService->requestIsNew(), 401);
+
+        $this->passwordlessLoginService->cacheRequest($request);
 
         $user = $this->passwordlessLoginService->user;
 
