@@ -77,6 +77,8 @@ LPL_LOGIN_ROUTE_NAME=magic-login
 LPL_LOGIN_ROUTE_EXPIRES=30
 LPL_REDIRECT_ON_LOGIN=/
 LPL_USER_GUARD=web
+LPL_USE_ONCE=false
+LPL_INVALID_SIGNATURE_MESSAGE="Expired or Invalid Link"
 ```
 LPL_USER_MODEL is the the authenticatable model you are logging in (usually App\User)
 
