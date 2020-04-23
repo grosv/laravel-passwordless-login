@@ -12,6 +12,15 @@ use Illuminate\Support\Str;
 class PasswordlessLoginService
 {
     /**
+     * @var User
+     */
+    public $user;
+
+    public function __construct()
+    {
+        $this->user = $this->getUser();
+    }
+    /**
      * Converts a class slug into a full class name.
      *
      * @param string $classSlug
@@ -43,14 +52,26 @@ class PasswordlessLoginService
     /**
      * Checks if this use class uses the PasswordlessLogable trait.
      *
-     * @param User $user
-     *
      * @return bool
      */
-    public function usesTrait(User $user): bool
+    public function usesTrait(): bool
     {
-        $traits = class_uses($user, true);
+        $traits = class_uses($this->user, true);
 
         return in_array(PasswordlessLogin::class, $traits);
+    }
+
+    /**
+     * Get the user from the request.
+     *
+     * @return mixed
+     */
+    public function getUser()
+    {
+        if (\request()->has('user_type')) {
+            $userModel = $this->getUserClass(request('user_type'));
+
+            return $userModel::findOrFail(request('uid'));
+        }
     }
 }
