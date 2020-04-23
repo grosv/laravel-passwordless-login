@@ -24,7 +24,7 @@ trait PasswordlessLogin
      *
      * @return bool
      */
-    public function shouldRememberLoginAttribute(): bool
+    public function getShouldRememberLoginAttribute(): bool
     {
         return config('laravel-passwordless-login.remember_login');
     }
