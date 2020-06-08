@@ -18,8 +18,8 @@ class UserClassTest extends TestCase
     /** @test **/
     public function make_from_slug()
     {
-        $userType = UserClass::fromSlug('hello_world-models_folder-user');
+        $userClass = UserClass::fromSlug('hello_world-models_folder-user');
 
-        $this->assertEquals('HelloWorld\\ModelsFolder\\User', $userType);
+        $this->assertEquals('HelloWorld\\ModelsFolder\\User', $userClass);
     }
 }
