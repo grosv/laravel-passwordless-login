@@ -75,4 +75,14 @@ trait PasswordlessLogin
     {
         return redirect($this->getRedirectUrlAttribute());
     }
+
+    /**
+     * Generates the login link for this user.
+     *
+     * @return string
+     */
+    public function generateLoginUrl()
+    {
+        return \Grosv\LaravelPasswordlessLogin\PasswordlessLogin::forUser($this)->generate();
+    }
 }
