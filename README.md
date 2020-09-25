@@ -47,7 +47,7 @@ class User extends Authenticatable
         return config('laravel-passwordless-login.remember_login');
     }
     
-    public function shouldRememberLoginAttribute(): bool
+    public function getShouldRememberLoginAttribute(): bool
     {
         return config('laravel-passwordless-login.remember_login');
     }
