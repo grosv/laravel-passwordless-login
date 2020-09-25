@@ -2,7 +2,7 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Contracts\Auth\Authenticatable as User;
 
 /**
  * The class used by \Grosv\LaravelPasswordlessLogin\PasswordlessLoginFacade.
