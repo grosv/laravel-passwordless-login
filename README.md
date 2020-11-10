@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function getGuardNameAttribute(): string 
     {
-        return config('laravel-passwordless-login.remember_login');
+        return config('laravel-passwordless-login.user_guard');
     }
     
     public function shouldRememberLoginAttribute(): bool
