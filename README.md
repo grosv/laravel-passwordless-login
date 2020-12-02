@@ -68,7 +68,7 @@ If you are using the PasswordlessLogin Trait, you can generate a link using the 
 The biggest mistake I could see someone making with this package is creating a login link for one user and sending it to another. Please be careful and test your code. I don't want anyone getting mad at me for somoene else's silliness. 
 
 ### Configuration
-You can publish the config file or just set the values you wan to use in your .env file:
+You can publish the config file or just set the values you want to use in your .env file:
 ```dotenv
 LPL_USER_MODEL=App\User
 LPL_REMEMBER_LOGIN=false
