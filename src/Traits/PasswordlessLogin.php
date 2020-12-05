@@ -73,7 +73,7 @@ trait PasswordlessLogin
      */
     public function onPasswordlessLoginSuccess($request)
     {
-        return redirect($this->getRedirectUrlAttribute());
+        return ($request->has('redirect_to')) ? redirect($request->redirect_to) : redirect($this->getRedirectUrlAttribute());
     }
 
     /**
