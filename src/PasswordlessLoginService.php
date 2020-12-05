@@ -3,7 +3,7 @@
 namespace Grosv\LaravelPasswordlessLogin;
 
 use Grosv\LaravelPasswordlessLogin\Traits\PasswordlessLogin;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Http\Request;
 
 /**
