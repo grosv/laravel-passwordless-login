@@ -47,13 +47,11 @@ class LoginUrl
 
     public function generate()
     {
-        $idField = $this->user->getKeyName() ?? 'id';
-
         return URL::temporarySignedRoute(
             $this->route_name,
             $this->route_expires,
             [
-                'uid'           => $this->user->$idField,
+                'uid'           => $this->user->getAuthIdentifier(),
                 'redirect_to'   => $this->redirect_url,
                 'user_type'     => UserClass::toSlug(get_class($this->user)),
             ]
