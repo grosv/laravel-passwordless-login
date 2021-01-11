@@ -86,6 +86,6 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function overrideTestRoute()
     {
-        return response('Redirected ' . Auth::user()->name, 200);
+        return response('Redirected '.Auth::user()->name, 200);
     }
 }
