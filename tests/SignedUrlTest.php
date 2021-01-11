@@ -4,9 +4,11 @@ namespace Tests;
 
 use Carbon\Carbon;
 use Faker\Factory as Faker;
+use Grosv\LaravelPasswordlessLogin\Exceptions\ExpiredSignatureException;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
 use Grosv\LaravelPasswordlessLogin\Models\Models\User as ModelUser;
 use Grosv\LaravelPasswordlessLogin\Models\User;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -62,6 +64,7 @@ class SignedUrlTest extends TestCase
     /** @test */
     public function a_signed_request_will_log_user_in_and_redirect()
     {
+        $this->withoutExceptionHandling();
         $this->assertGuest();
         $response = $this->followingRedirects()->get($this->url);
         $this->assertAuthenticatedAs($this->user);
@@ -75,8 +78,9 @@ class SignedUrlTest extends TestCase
     {
         $unsigned = explode('?', $this->url)[0];
         $this->assertGuest();
-        $response = $this->get($unsigned);
-        $response->assertStatus(401);
+        $this->withoutExceptionHandling();
+        $this->expectException(InvalidSignatureException::class);
+        $this->get($unsigned);
         $this->assertGuest();
     }
 
@@ -84,9 +88,9 @@ class SignedUrlTest extends TestCase
     public function an_invalid_signature_request_will_not_log_user_in()
     {
         $this->assertGuest();
-        $response = $this->get($this->url.'tampered');
-        $response->assertStatus(401);
-        $this->assertGuest();
+        $this->withoutExceptionHandling();
+        $this->expectException(InvalidSignatureException::class);
+        $this->get($this->url.'tampered');
     }
 
     /** @test */
@@ -117,9 +121,16 @@ class SignedUrlTest extends TestCase
     {
         sleep(config('laravel-passwordless-login.login_route_expires') + 1);
 
+        // Make sure 401 is returned
         $this->assertGuest();
         $response = $this->get($this->url);
         $response->assertStatus(401);
+        $this->assertGuest();
+
+        // Make sure ExpiredSignatureException is thrown
+        $this->withoutExceptionHandling();
+        $this->expectException(ExpiredSignatureException::class);
+        $this->get($this->url);
         $this->assertGuest();
     }
 }
