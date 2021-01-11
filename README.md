@@ -80,21 +80,21 @@ LPL_USER_GUARD=web
 LPL_USE_ONCE=false
 LPL_INVALID_SIGNATURE_MESSAGE="Expired or Invalid Link"
 ```
-LPL_USER_MODEL is the the authenticatable model you are logging in (usually App\User)
+`LPL_USER_MODEL` is the the authenticatable model you are logging in (usually App\User)
 
-LPL_REMEMBER_LOGIN is whether you want to remember the login (like the user checking Remember Me)
+`LPL_REMEMBER_LOGIN` is whether you want to remember the login (like the user checking Remember Me)
 
-LPL_LOGIN_ROUTE is the route that points to the login function this package provides. Make sure you don't collide with one of your other routes.
+`LPL_LOGIN_ROUTE` is the route that points to the login function this package provides. Make sure you don't collide with one of your other routes.
 
-LPL_LOGIN_ROUTE_NAME is the name of the LPL_LOGIN_ROUTE. Again, make sure it doesn't collide with any of your existing route names.
+`LPL_LOGIN_ROUTE_NAME` is the name of the LPL_LOGIN_ROUTE. Again, make sure it doesn't collide with any of your existing route names.
 
-LPL_LOGIN_ROUTE_EXPIRES is the number of minutes you want the link to be good for. I recommend you set the shortest value that makes sense for your use case.
+`LPL_LOGIN_ROUTE_EXPIRES` is the number of minutes you want the link to be good for. I recommend you set the shortest value that makes sense for your use case.
 
-LPL_REDIRECT_ON_LOGIN is where you want to send the user after they've logged in by clicking their magic link.
+`LPL_REDIRECT_ON_LOGIN` is where you want to send the user after they've logged in by clicking their magic link.
 
-LPL_USE_ONCE is whether you want a link to expire after first use (uses cache to store used links)
+`LPL_USE_ONCE` is whether you want a link to expire after first use (uses cache to store used links)
 
-LPL_INVALID_SIGNATURE_MESSAGE is a custom message sent when we abort with a 401 status on an invalid or expired link
+`LPL_INVALID_SIGNATURE_MESSAGE` is a custom message sent when we abort with a 401 status on an invalid or expired link. You can also add some custom logic on how to deal with invalid or expired links by handling `InvalidSignatureException` and `ExpiredSignatureException` in your `Handler.php` file. 
 
 ### Reporting Issues
 
