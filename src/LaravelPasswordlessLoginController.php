@@ -2,8 +2,11 @@
 
 namespace Grosv\LaravelPasswordlessLogin;
 
+use Grosv\LaravelPasswordlessLogin\Exceptions\ExpiredSignatureException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth;
 
 class LaravelPasswordlessLoginController extends Controller
@@ -14,13 +17,19 @@ class LaravelPasswordlessLoginController extends Controller
     private $passwordlessLoginService;
 
     /**
+     * @var UrlGenerator
+     */
+    private $urlGenerator;
+
+    /**
      * LaravelPasswordlessLoginController constructor.
      *
      * @param PasswordlessLoginService $passwordlessLoginService
      */
-    public function __construct(PasswordlessLoginService $passwordlessLoginService)
+    public function __construct(PasswordlessLoginService $passwordlessLoginService, UrlGenerator $urlGenerator)
     {
         $this->passwordlessLoginService = $passwordlessLoginService;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -28,14 +37,20 @@ class LaravelPasswordlessLoginController extends Controller
      *
      * @param Request $request
      *
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Psr\SimpleCache\InvalidArgumentException|InvalidSignatureException|ExpiredSignatureException
      */
     public function login(Request $request)
     {
-        abort_if(!$request->hasValidSignature() || !$this->passwordlessLoginService->requestIsNew(), 401, config('laravel-passwordless-login.invalid_signature_message'));
+        if (!$this->urlGenerator->hasCorrectSignature($request)) {
+            throw new InvalidSignatureException();
+        }
+        if (!$this->urlGenerator->signatureHasNotExpired($request)) {
+            throw new ExpiredSignatureException();
+        }
+        if (!$this->passwordlessLoginService->requestIsNew()) {
+            abort(401, config('laravel-passwordless-login.invalid_signature_message'));
+        }
 
         $this->passwordlessLoginService->cacheRequest($request);
 
@@ -71,6 +86,6 @@ class LaravelPasswordlessLoginController extends Controller
      */
     public function overrideTestRoute()
     {
-        return response('Redirected '.Auth::user()->name, 200);
+        return response('Redirected ' . Auth::user()->name, 200);
     }
 }
