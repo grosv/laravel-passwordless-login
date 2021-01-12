@@ -5,7 +5,7 @@ namespace Grosv\LaravelPasswordlessLogin\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpException as Exception;
 
-class ExpiredSignatureException extends Exception
+class InvalidSignatureException extends Exception
 {
     public function __construct()
     {

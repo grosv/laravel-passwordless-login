@@ -4,11 +4,11 @@ namespace Tests;
 
 use Carbon\Carbon;
 use Faker\Factory as Faker;
+use Grosv\LaravelPasswordlessLogin\Exceptions\InvalidSignatureException;
 use Grosv\LaravelPasswordlessLogin\Exceptions\ExpiredSignatureException;
 use Grosv\LaravelPasswordlessLogin\LoginUrl;
 use Grosv\LaravelPasswordlessLogin\Models\Models\User as ModelUser;
 use Grosv\LaravelPasswordlessLogin\Models\User;
-use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -87,7 +87,13 @@ class SignedUrlTest extends TestCase
     /** @test */
     public function an_invalid_signature_request_will_not_log_user_in()
     {
+        // Check 401 is returned
         $this->assertGuest();
+        $response = $this->get($this->url.'tampered');
+        $response->assertStatus(401);
+        $this->assertGuest();
+
+        // Check correct exception is thrown
         $this->withoutExceptionHandling();
         $this->expectException(InvalidSignatureException::class);
         $this->get($this->url.'tampered');
