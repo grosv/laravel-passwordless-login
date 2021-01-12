@@ -9,6 +9,6 @@ class ExpiredSignatureException extends Exception
 {
     public function __construct()
     {
-        parent::__construct(401, 'Invalid signature.');
+        parent::__construct(401, config('laravel-passwordless-login.invalid_signature_message'));
     }
 }
