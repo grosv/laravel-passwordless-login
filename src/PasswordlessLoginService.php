@@ -5,6 +5,7 @@ namespace Grosv\LaravelPasswordlessLogin;
 use Grosv\LaravelPasswordlessLogin\Traits\PasswordlessLogin;
 use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Service class to keep the controller clean.
@@ -46,10 +47,10 @@ class PasswordlessLoginService
      */
     public function getUser()
     {
-        if (\request()->has('user_type')) {
-            $userModel = UserClass::fromSlug(request('user_type'));
-
-            return $userModel::findOrFail(request('uid'));
+        if (request()->has('user_type')) {
+            return Auth::guard(config('laravel-passwordless-login.user_guard'))
+                ->getProvider()
+                ->retrieveById(request('uid'));
         }
     }
 
