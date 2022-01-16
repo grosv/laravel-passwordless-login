@@ -1,0 +1,48 @@
+name: Test
+on:
+  - push
+jobs:
+  test:
+    strategy:
+      matrix:
+        operating-system:
+          - ubuntu-latest
+        php-version:
+          - '7.4'
+          - '8.0'
+          - '8.1'
+    name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring
+          coverage: none
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Setup composer cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install composer dependencies
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run tests
+        run: vendor/bin/phpunit
