@@ -1,7 +1,6 @@
 # Laravel Passwordless Login
 ### A simple, safe magic login link generator for Laravel
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/grosv/laravel-passwordless-login.svg?style=flat-square)](https://packagist.org/packages/grosv/laravel-passwordless-login)
-[![StyleCI](https://github.styleci.io/repos/243858945/shield?branch=master)](https://github.styleci.io/repos/243858945)
+![example workflow](https://github.com/grosv/laravel-passwordless-login/actions/workflows/test.yml/badge.svg)
 ![Build Status](https://app.chipperci.com/projects/8c76f67e-e513-46a3-ad7a-aecb136dfa05/status/master)
 
 This package provides a temporary signed route that logs in a user. What it does not provide is a way of actually sending the link to the route to the user. This is because I don't want to make any assumptions about how you communicate with your users.
