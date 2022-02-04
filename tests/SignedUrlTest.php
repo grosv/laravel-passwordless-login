@@ -26,19 +26,19 @@ class SignedUrlTest extends TestCase
 
         $faker = Faker::create();
         $this->user = User::create([
-            'name'              => $faker->name,
-            'email'             => $faker->unique()->safeEmail,
+            'name' => $faker->name,
+            'email' => $faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token'    => Str::random(10),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
         ]);
 
         $this->model_user = ModelUser::create([
-            'name'              => $faker->name,
-            'email'             => $faker->unique()->safeEmail,
+            'name' => $faker->name,
+            'email' => $faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token'    => Str::random(10),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
         ]);
 
         Carbon::setTestNow();
@@ -89,14 +89,14 @@ class SignedUrlTest extends TestCase
     {
         // Check 401 is returned
         $this->assertGuest();
-        $response = $this->get($this->url.'tampered');
+        $response = $this->get($this->url . 'tampered');
         $response->assertStatus(401);
         $this->assertGuest();
 
         // Check correct exception is thrown
         $this->withoutExceptionHandling();
         $this->expectException(InvalidSignatureException::class);
-        $this->get($this->url.'tampered');
+        $this->get($this->url . 'tampered');
     }
 
     /** @test */
@@ -138,5 +138,21 @@ class SignedUrlTest extends TestCase
         $this->expectException(ExpiredSignatureException::class);
         $this->get($this->url);
         $this->assertGuest();
+    }
+
+    /** @test */
+    public function an_authenticated_user_is_redirected_correctly()
+    {
+        $this->actingAs($this->user);
+        $response = $this->get($this->url);
+        $response->assertRedirect(config('laravel-passwordless-login.redirect_on_success'));
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_redirect_on_url_is_redirected_correctly()
+    {
+        $this->actingAs($this->user);
+        $response = $this->get($this->url . '&redirect_to=/happy_path');
+        $response->assertRedirect('/happy_path');
     }
 }
